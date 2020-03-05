@@ -21,6 +21,7 @@ public class Main {
       System.out.println("2) ввод по одному числу с выводом ответа после каждого");
       System.out.println("3) прогон случайными числами, вводимыми пачкой");
       System.out.println("4) прогон случайными числами, вводимыми по одному");
+      System.out.println("5) прогон данных, соответствующих \"лучшему случаю\"");
       System.out.println("0) выход");
       System.out.println("выберите пункт меню: ");
 
@@ -44,6 +45,10 @@ public class Main {
 
         case 4:
           randomEnterOneByOne(in);
+          break;
+
+        case 5:
+          bestCase(in);
           break;
 
         default:
@@ -204,6 +209,55 @@ public class Main {
     }
 
   }
+
+  private static void bestCase(Scanner in) {
+    System.out.println("------- ПРОГОН НА ДАННЫХ СООТВЕТСТВУЮЩИХ ЛУЧШЕМУ СЛУЧАЮ -----------");
+
+    System.out.println("Количество чисел в вычисляемом массиве: ");
+    String input = in.nextLine();
+    int count = Integer.parseInt(input);
+
+    System.out.println("Количество прогонов: ");
+    input = in.nextLine();
+    int iterationsCount = Integer.parseInt(input);
+
+    // определим все переменные здесь
+    List<Integer> data;
+    LabVariant6 counter;
+    int i;
+    long start, end;
+
+    // iterationsCount раз повторим вычисление
+    while (iterationsCount-- > 0) {
+      data = new ArrayList<>();
+      i = count;
+
+      // count-1 раз добавим  единицу в массив данных
+      while (i-- > 1) {
+        data.add(1);
+      }
+
+      // добавим в конец максимальное значение инта
+      data.add(Integer.MAX_VALUE);
+
+      // создание экземпляра класса-вычислителя
+      counter = new LabVariant6(data);
+
+      // засечем время начала обработки
+      start = System.nanoTime();
+
+      // посчитаем
+      ResultType result = counter.count();
+
+      // засечем время окончания обработки
+      end = System.nanoTime();
+
+      // выведем инфу о том, что у нас получилось
+      System.out.println(toText(result));
+      System.out.println("Расчитано за " + (end - start) / 1000 + "мкс");
+    }
+  }
+
 
   // метод для формирования человеческой строки в зависимости от значения результата
   private static String toText(ResultType resultType) {
